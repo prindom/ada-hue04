@@ -9,9 +9,17 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
 
     <title>Movie Lens</title>
+
 </head>
 <body>
-<h1>Hello, world!</h1>
+<h1>Movie Lens!</h1>
+<form id="login" class = "form">
+    <label>
+        Login-ID:
+        <input type="text" placeholder="Login-ID" name = "login_id" value ="" required/>
+    </label>
+    <input type = "submit" value ="save">
+</form>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
