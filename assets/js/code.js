@@ -1,12 +1,13 @@
 $(document).ready(function(){
-    $("login").submit(function(e){
+    console.log("buongiorno");
+    $("#login").submit(function(e){
+        console.log("hey");
         e.preventDefault();
         $.ajax({
             method: "POST",
-            url: ajaxurl,
+            url: window.location.href + "Controller.php",
             data: {
-                login_id: $("[name='login_id']").val(),
-                action: ""
+                login: $("[name='login_id']").val()
             },
             dataType: "json",
             success: function(data){alert("Login successfull");
