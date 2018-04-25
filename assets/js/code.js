@@ -1,6 +1,6 @@
-$(document).ready(function(){
+$(document).ready(function () {
     console.log("buongiorno");
-    $("#login").submit(function(e){
+    $("#login").submit(function (e) {
         console.log("hey");
         e.preventDefault();
         $.ajax({
@@ -10,15 +10,29 @@ $(document).ready(function(){
                 login: $("[name='login_id']").val()
             },
             dataType: "json",
-            success: function(data){alert("Login successfull");
+            success: function (data) {
+                showFavs(data);
             },
             error: function (data) {
                 alert("error");
             },
             complete: function (data) {
-                console.log(data);
+                //console.log(data);
 
             }
         })
     })
 });
+
+// TODO get Movies
+function showFavs(data) {
+
+    $.each(data, function (key, value) {
+        $elem = $("<div class='movie'>");
+        console.log(value);
+
+        $("#favs-container").append($elem);
+    });
+
+    $("#favs-container").removeClass("d-none");
+}
