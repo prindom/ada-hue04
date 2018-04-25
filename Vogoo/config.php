@@ -5,7 +5,7 @@
 $vg_dbms = 'mysql';
 $vg_dbhost = 'localhost';
 $vg_dbname = 'vogoo';
-$vg_dbuser = 'vogoo2';
+$vg_dbuser = 'root';
 $vg_dbpasswd = '';
 define('VOGOO_INSTALLED', true);
 ?>
