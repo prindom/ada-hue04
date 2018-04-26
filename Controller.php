@@ -6,10 +6,10 @@ const vg_dbname = 'vogoo';
 const vg_dbuser = 'root';
 const vg_dbpasswd = '';
 
+require("./Vogoo/vogoo.php");
+require("./Vogoo/users.php");
+require("./Vogoo/items.php");
 
-include ("./Vogoo/vogoo.php");
-include ("./Vogoo/users.php");
-include ("./Vogoo/items.php");
 
 if (isset($_POST["login"])) {
     login($_POST["login"]);
@@ -17,15 +17,15 @@ if (isset($_POST["login"])) {
     unset($_SESSION["username"]);
 }
 
-if(isset($_POST["method"])) {
-    // $_POST["method"]();
-    if($_POST["method"] == "getItemBased") {
-        $items = $vogoo_items->member_get_recommended_items(1);
-        var_dump($items);
-        exit;
+if (isset($_POST["method"])) {
+    if ($_POST["method"] == "getItemBased") {
+        getItemBased($vogoo_items);
     }
 }
 
+/**
+ * @param $user
+ */
 function login($user)
 {
     $_SESSION["username"] = $user;
@@ -45,6 +45,9 @@ function login($user)
 }
 
 
+/**
+ *
+ */
 function getFavourites()
 {
     if (isset($_SESSION["username"])) {
@@ -78,13 +81,21 @@ function getFavourites()
     }
 }
 
+/**
+ *
+ */
 function getUserBased()
 {
 
 }
 
-function getProduct($id) {
-    $sql = "SELECT * FROM vogoo_products WHERE product_id = ".$id;
+/**
+ * @param $id
+ * @return null
+ */
+function getProduct($id)
+{
+    $sql = "SELECT * FROM vogoo_products WHERE product_id = " . $id;
 
     $db = mysqli_connect(vg_dbhost, vg_dbuser, vg_dbpasswd, vg_dbname);
 
@@ -92,52 +103,49 @@ function getProduct($id) {
 
     $results = $result->fetch_all(MYSQLI_ASSOC);
 
-    var_dump($results);
-
-    if(!empty($results)) {
+    if (!empty($results)) {
         return $results[0];
     } else {
         return null;
     }
 }
 
-function getItemBased() {
-    echo "in itembased";
-    if(isset($_SESSION["username"])) {
-        echo " and logged in";
+/**
+ *
+ */
+function getItemBased($vogoo_items)
+{
+    if (isset($_SESSION["username"])) {
         $items = $vogoo_items->member_get_recommended_items($_SESSION["username"]);
 
-        var_dump($items);
         $final = array();
 
         foreach ($items as $item) {
             $final[$item] = getProduct($item);
+            $final[$item]["reasons"] = getReasonsForItem($item, $vogoo_items);
         }
 
 
-
-        // header("Content-Type: application/json");
-        echo json_encode(["success" => true,"message" => "some text", "data" => $final]);
+        header("Content-Type: application/json");
+        echo json_encode(["success" => true, "message" => "some text", "data" => $final]);
         exit;
 
 
     } else {
         // not logged in
-        // header("Content-Type: application/json");
+        header("Content-Type: application/json");
         echo json_encode(["success" => false, "message" => "not logged in"]);
         exit;
     }
-
-
 
 
 }
 
 /**
  * @param $product_id
- * @return string
+ * @return array
  */
-function getReasonsForItem($product_id)
+function getReasonsForItem($product_id, $vogoo_items)
 {
     if (isset($_SESSION["username"])) {
         $reasonItems = $vogoo_items->member_get_reasons($_SESSION["username"], $product_id);
@@ -145,15 +153,15 @@ function getReasonsForItem($product_id)
 
         if (count($reasonItems) > 3) {
             for ($i = 0; $i <= 2; $i++) {
-                $final[$reasonItems[$i]] = array("name" => getItemName($reasonItems[$i]));
+                $final[$reasonItems[$i]] = getProduct($reasonItems[$i]);
             }
         } else {
             foreach ($reasonItems as $item) {
-                $final[$item] = array("name" => getItemName($item));
+                $final[$item] = getProduct($item);
             }
         }
 
-        return json_encode($final);
+        return $final;
 
     } else {
         // not loggged in

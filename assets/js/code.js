@@ -12,6 +12,7 @@ $(document).ready(function () {
                 //showFavs(data);
                 //showUserBased(data);
                 showItemBased(data);
+                $("#login-container").hide();
             },
             error: function (data) {
                 alert("error");
@@ -49,8 +50,6 @@ function showFavs(logindata) {
         }
     });
 
-    $("#login-container").hide();
-
     $("#favs-container").removeClass("d-none");
 }
 
@@ -68,6 +67,23 @@ function showItemBased(logindata) {
         dataType: "json",
         success: function (data) {
             console.log(data);
+            $.each(data.data, function (key, value) {
+
+                let $elem = $("<div class='movie'>");
+                $elem.append("<p>" + value.product_name + "</p>");
+
+                let reasons = "<p>Because you liked ";
+                $.each(value.reasons, function (subkey, subvalue) {
+                    console.log(subvalue);
+                    reasons += subvalue.product_name+",";
+                });
+
+                reasons += ".</p>";
+
+                $elem.append($(reasons));
+
+                $("#item-based-container").append($elem);
+            });
         },
         error: function (data) {
             console.log("error:", data);
@@ -77,7 +93,5 @@ function showItemBased(logindata) {
         }
     });
 
-    $("#login-container").hide();
-
-    $("#favs-container").removeClass("d-none");
+    $("#item-based-container").removeClass("d-none");
 }

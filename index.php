@@ -26,9 +26,9 @@
         </form>
     </div>
 
-    <div class="container d-none" id="favs-container">
-        <p>test</p>
-    </div>
+    <div class="container d-none" id="favs-container"></div>
+    <div class="container d-none" id="user-based-container"></div>
+    <div class="container d-none" id="item-based-container"></div>
 
 </div>
 
