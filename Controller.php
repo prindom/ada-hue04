@@ -7,9 +7,9 @@ const vg_dbuser = 'root';
 const vg_dbpasswd = '';
 
 
-require_once("./Vogoo/vogoo.php");
-require_once("./Vogoo/users.php");
-require_once("./Vogoo/items.php");
+include ("./Vogoo/vogoo.php");
+include ("./Vogoo/users.php");
+include ("./Vogoo/items.php");
 
 if (isset($_POST["login"])) {
     login($_POST["login"]);
@@ -18,7 +18,12 @@ if (isset($_POST["login"])) {
 }
 
 if(isset($_POST["method"])) {
-    $_POST["method"]();
+    // $_POST["method"]();
+    if($_POST["method"] == "getItemBased") {
+        $items = $vogoo_items->member_get_recommended_items(1);
+        var_dump($items);
+        exit;
+    }
 }
 
 function login($user)
@@ -78,8 +83,53 @@ function getUserBased()
 
 }
 
-function getItemName()
-{
+function getProduct($id) {
+    $sql = "SELECT * FROM vogoo_products WHERE product_id = ".$id;
+
+    $db = mysqli_connect(vg_dbhost, vg_dbuser, vg_dbpasswd, vg_dbname);
+
+    $result = $db->query($sql);
+
+    $results = $result->fetch_all(MYSQLI_ASSOC);
+
+    var_dump($results);
+
+    if(!empty($results)) {
+        return $results[0];
+    } else {
+        return null;
+    }
+}
+
+function getItemBased() {
+    echo "in itembased";
+    if(isset($_SESSION["username"])) {
+        echo " and logged in";
+        $items = $vogoo_items->member_get_recommended_items($_SESSION["username"]);
+
+        var_dump($items);
+        $final = array();
+
+        foreach ($items as $item) {
+            $final[$item] = getProduct($item);
+        }
+
+
+
+        // header("Content-Type: application/json");
+        echo json_encode(["success" => true,"message" => "some text", "data" => $final]);
+        exit;
+
+
+    } else {
+        // not logged in
+        // header("Content-Type: application/json");
+        echo json_encode(["success" => false, "message" => "not logged in"]);
+        exit;
+    }
+
+
+
 
 }
 

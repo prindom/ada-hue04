@@ -1,7 +1,5 @@
 $(document).ready(function () {
-    console.log("buongiorno");
     $("#login").submit(function (e) {
-        console.log("hey");
         e.preventDefault();
         $.ajax({
             method: "POST",
@@ -11,7 +9,9 @@ $(document).ready(function () {
             },
             dataType: "json",
             success: function (data) {
-                showFavs(data);
+                //showFavs(data);
+                //showUserBased(data);
+                showItemBased(data);
             },
             error: function (data) {
                 alert("error");
@@ -24,9 +24,8 @@ $(document).ready(function () {
     })
 });
 
-// TODO get Movies
 function showFavs(logindata) {
-    console.log("logindata:");
+    console.log("favs logindata:");
     console.log(logindata);
     $.ajax({
         method: "POST",
@@ -41,6 +40,34 @@ function showFavs(logindata) {
                 $elem.append("<p>" + value.rating + " of 1 Points</p>");
                 $("#favs-container").append($elem);
             });
+        },
+        error: function (data) {
+            console.log("error:", data);
+        },
+        complete: function (data) {
+
+        }
+    });
+
+    $("#login-container").hide();
+
+    $("#favs-container").removeClass("d-none");
+}
+
+function showUserBased(logindata) {
+
+}
+
+function showItemBased(logindata) {
+    console.log("itembased logindata:");
+    console.log(logindata);
+    $.ajax({
+        method: "POST",
+        url: window.location.href + "Controller.php",
+        data: {"method": "getItemBased"},
+        dataType: "json",
+        success: function (data) {
+            console.log(data);
         },
         error: function (data) {
             console.log("error:", data);
