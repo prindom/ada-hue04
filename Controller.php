@@ -17,7 +17,9 @@ if (isset($_POST["login"])) {
     unset($_SESSION["username"]);
 }
 
-getFavourites();
+if(isset($_POST["method"])) {
+    $_POST["method"]();
+}
 
 function login($user)
 {
@@ -30,9 +32,9 @@ function login($user)
     $result = $db->query($sql);
 
     if ($row = $result->fetch_row()) {
-        echo json_encode(["success" => true, "message" => "user was found and logged in"]);
+        echo json_encode(["success" => true, "message" => "user was found and logged in", "user" => $user]);
     } else {
-        echo json_encode(["success" => true, "message" => "user was not found and logged in"]);
+        echo json_encode(["success" => true, "message" => "user was not found and logged in", "user" => $user]);
     }
     exit;
 }

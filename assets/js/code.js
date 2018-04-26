@@ -25,14 +25,32 @@ $(document).ready(function () {
 });
 
 // TODO get Movies
-function showFavs(data) {
+function showFavs(logindata) {
+    console.log("logindata:");
+    console.log(logindata);
+    $.ajax({
+        method: "POST",
+        url: window.location.href + "Controller.php",
+        data: {"method": "getFavourites"},
+        dataType: "json",
+        success: function (data) {
+            console.log(data);
+            $.each(data, function (key, value) {
+                let $elem = $("<div class='movie'>");
+                $elem.append("<p>" + value.name + "</p>");
+                $elem.append("<p>" + value.rating + " of 1 Points</p>");
+                $("#favs-container").append($elem);
+            });
+        },
+        error: function (data) {
+            console.log("error:", data);
+        },
+        complete: function (data) {
 
-    $.each(data, function (key, value) {
-        $elem = $("<div class='movie'>");
-        console.log(value);
-
-        $("#favs-container").append($elem);
+        }
     });
+
+    $("#login-container").hide();
 
     $("#favs-container").removeClass("d-none");
 }
