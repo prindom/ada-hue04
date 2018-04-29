@@ -1,0 +1,49 @@
+.caption {
+    min-height: 250px;
+}
+
+body {
+    background-color: #202020!important;
+}
+
+.col-md-4 .thumbnail {
+    padding: 0;
+    margin-bottom: 0;
+    border: 1px solid black;
+    border-radius: 0;
+}
+
+.item .col-md-4 {
+    padding: 0;
+}
+
+.container .panel-default {
+    border: none;
+}
+
+.container .panel-default .panel-body {
+    background-color: black;
+}
+
+.container .panel-default .panel-heading {
+    background-color: black;
+    border-bottom: 1px solid #ddd;
+    color: #ddd;
+    text-transform: uppercase;
+}
+
+#loadingScreen {
+    position: absolute;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #fafaf5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+body {
+    overflow: hidden;
+}

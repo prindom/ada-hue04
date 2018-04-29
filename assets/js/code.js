@@ -9,81 +9,249 @@ $(document).ready(function () {
             },
             dataType: "json",
             success: function (data) {
-                //showFavs(data);
-                //showUserBased(data);
-                showItemBased(data);
-                $("#login-container").hide();
+                if(data.found === true)
+                location.reload();
+                else {
+                    $('#login-container').append('<div class="alert alert-danger" role="alert">\n' +
+                        '  <a href="#" class="alert-link">Für diesen Nutzer sind leider keine Filmvorschläge verfügbar :/</a>' +
+                        '</div>')
+                }
+
             },
             error: function (data) {
-                alert("error");
+                console.log(data);
             },
             complete: function (data) {
-                //console.log(data);
+            }
+        })
+    });
+
+    $("#logout").submit(function (e) {
+        e.preventDefault();
+        $.ajax({
+            method: "POST",
+            url: window.location.href + "Controller.php",
+            data: {"method": "logout"},
+            dataType: "json",
+            success: function (data) {
+                location.reload();
+                $("#login-container").show();
+                $("#logout-container").hide();
+            },
+            error: function (data) {
+                console.log(data)
+            },
+            complete: function (data) {
+                console.log(data);
 
             }
         })
-    })
+    });
+
 });
 
-function showFavs(logindata) {
-    console.log("favs logindata:");
-    console.log(logindata);
+function showFavs() {
+    console.log("showFavs");
     $.ajax({
         method: "POST",
         url: window.location.href + "Controller.php",
         data: {"method": "getFavourites"},
         dataType: "json",
         success: function (data) {
-            console.log(data);
-            $.each(data, function (key, value) {
-                let $elem = $("<div class='movie'>");
-                $elem.append("<p>" + value.name + "</p>");
-                $elem.append("<p>" + value.rating + " of 1 Points</p>");
-                $("#favs-container").append($elem);
+            let i = 0;
+            $.each(data.favorites, function (key, value) {
+                let active = "";
+
+                if (i === 0) active = "active";
+
+                let title = value.name;
+                let year = title.match(/(\()([1-9])([0-9])([0-9])([0-9])(\))/g);
+                year = title.match(/([1-9])([0-9])([0-9])([0-9])/g);
+                year = year[0];
+                let name = title.substr(0,title.length-7);
+                name = name.replace(/ /g, '+');
+                getSrc(name, year, function(src){
+                    let $elem = $('<div class="item '+ active +'"><div class="col-md-4">\n' +
+                        '                <div class="thumbnail">' +
+                        '                   <img src="'+ src +'" alt="..." height="200">\n' +
+                        '                    <div class="caption">\n' +
+                        '                        <h3>' + value.name + '</h3>\n' +
+                        '                        <p>Bewertung: ' + value.rating + ' Sterne</p>\n' +
+                        '                    </div>' +
+                        '                    </div></div></div> ');
+                    $("#favs-container").append($elem);
+                });
+
+
+
+
+
+                i++;
             });
+
+
         },
         error: function (data) {
             console.log("error:", data);
         },
         complete: function (data) {
-
+            console.log("favsDone");
         }
     });
 
-    $("#favs-container").removeClass("d-none");
 }
 
-function showUserBased(logindata) {
+function showUserBased() {
+    console.log("showUserBased");
+
+    $.ajax({
+        method: "POST",
+        url: window.location.href + "Controller.php",
+        data: {"method": "getUserBased"},
+        dataType: "json",
+        success: function (data) {
+            let i = 0;
+            $.each(data.recommendations, function (key, value) {
+                let active = "";
+
+                if (i === 0) active = "active";
+                    let title = value;
+                    let year = title.match(/(\()([1-9])([0-9])([0-9])([0-9])(\))/g);
+                    year = title.match(/([1-9])([0-9])([0-9])([0-9])/g);
+                    year = year[0];
+                    let name = title.substr(0,title.length-7);
+                    name = name.replace(/ /g, '+');
+                    getSrc(name, year, function(src) {
+
+                        let $elem = $('<div class="item ' + active + '"><div class="col-md-4">\n' +
+                            '                <div class="thumbnail">' +
+                            '                   <img src="'+src+'" alt="..." height="200">\n' +
+                            '                    <div class="caption">\n' +
+                            '                        <h3>' + value + '</h3>\n' +
+                            '                    </div>' +
+                            '                    </div></div></div> ');
+
+                        $("#user-based-container").append($elem);
+
+                    });
+
+
+                i++;
+            });
+
+        },
+        error: function (data) {
+            console.log("error:", data);
+        },
+        complete: function (data) {
+            console.log("userDone");
+            setTimeout(carousel,1000);
+        }
+
+    });
 
 }
 
-function showItemBased(logindata) {
-    console.log("itembased logindata:");
-    console.log(logindata);
+
+function showItemBased() {
+    console.log("showItemBased");
+    console.log("in");
     $.ajax({
         method: "POST",
         url: window.location.href + "Controller.php",
         data: {"method": "getItemBased"},
         dataType: "json",
         success: function (data) {
-            console.log(data);
-            $.each(data.data, function (key, value) {
-
-                let $elem = $("<div class='movie'>");
-                $elem.append("<p>" + value.product_name + "</p>");
-
-                let reasons = "<p>Because you liked ";
+            let i = 0;
+            $.each(data.recommendations, function (key, value) {
+                let reasons = "<p>Weil dir folgende Filme gefallen haben </p>" +
+                    "<ul>";
                 $.each(value.reasons, function (subkey, subvalue) {
-                    console.log(subvalue);
-                    reasons += subvalue.product_name+",";
+
+
+                    reasons += '<li>'+subvalue+'</li>';
+
+
                 });
 
-                reasons += ".</p>";
+                reasons += ".</ul>";
+                let active = "";
 
-                $elem.append($(reasons));
+                if (i === 0) active = "active";
 
-                $("#item-based-container").append($elem);
+                    let title = value.name;
+                    let year = title.match(/(\()([1-9])([0-9])([0-9])([0-9])(\))/g);
+                    year = title.match(/([1-9])([0-9])([0-9])([0-9])/g);
+                    year = year[0];
+                    let name = title.substr(0,title.length-7);
+                    name = name.replace(/ /g, '+');
+                    getSrc(name, year, function(src) {
+
+                        let $elem = $('<div class="item ' + active + '"><div class="col-md-4">\n' +
+                            '                <div class="thumbnail">' +
+                            '                   <img src="'+src+'" alt="..." height="500">\n' +
+                            '                    <div class="caption">\n' +
+                            '                        <h3>' + value.name + '</h3>\n' +
+                            '                        <p>' + reasons + '</p>\n' +
+                            '                    </div>' +
+                            '                    </div></div></div> ');
+
+
+                        $("#item-based-container").append($elem);
+
+                    });
+                i++;
             });
+
+        },
+        error: function (data) {
+            console.log("error:", data);
+        },
+        complete: function (data) {
+            console.log("itemDone");
+        }
+    });
+
+}
+
+
+
+function carousel() {
+
+    console.log("in");
+
+    $('.multi-item-carousel').carousel({
+        interval: false
+    });
+
+    $('.multi-item-carousel .item').each(function(){
+        let next = $(this).next();
+        if (!next.length) {
+            next = $(this).siblings(':first');
+        }
+        next.children(':first-child').clone().appendTo($(this));
+
+        if (next.next().length>0) {
+            next.next().children(':first-child').clone().appendTo($(this));
+        } else {
+            $(this).siblings(':first').children(':first-child').clone().appendTo($(this));
+        }
+    });
+}
+
+function getSrc(name, year, callback){
+    $.ajax({
+        method: "GET",
+        url: 'http://www.omdbapi.com/?t='+ name +'&y='+ year +'&apikey=7c130ecc',
+        dataType: "json",
+        success: function (data) {
+            if(!data.imdbID) data.imdbID = 'tt0076759';
+
+                getImage(data.imdbID, function(src){
+                    callback(src);
+                });
+
+
         },
         error: function (data) {
             console.log("error:", data);
@@ -93,5 +261,22 @@ function showItemBased(logindata) {
         }
     });
 
-    $("#item-based-container").removeClass("d-none");
+}
+
+function getImage(id, callback){
+    $.ajax({
+        method: "GET",
+        url: 'https://api.themoviedb.org/3/movie/'+ id +'?api_key=355fa6da60ddfc07f6199b375c55f0f5',
+        dataType: "json",
+        success: function (data) {
+            let src = "https://image.tmdb.org/t/p/w500"+data.poster_path;
+            callback(src);
+        },
+        error: function (data) {
+            console.log("error:", data);
+        },
+        complete: function (data) {
+
+        }
+    });
 }

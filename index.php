@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 <head>
@@ -6,39 +7,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet/less" type="text/css" href="assets/css/carousel.less">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css">
+    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/3.0.2/less.min.js" ></script>
+    <!--<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css">-->
 
-    <title>Movie Lens</title>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+
+    <link rel="shortcut icon" href="http://www.pngmart.com/files/1/Sunglasses-Emoji-PNG-Clipart.png" type="image/png" />
+
+    <title>MovieZ</title>
 
 </head>
 <body>
-<div class="container">
-    <div class="container" id="login-container">
-        <h1>Movie Lens</h1>
-        <p>Movie Lens is a great platform to get recommended movies, made with love ;).</p>
-        <form id="login" class = "form-group">
-            <div class="form-group">
-                <label>Enter Login ID:</label>
-                <input type="text" placeholder="Login-ID" name = "login_id" required class="form-control"/>
-            </div>
-            <input type = "submit" value ="save" class="btn btn-info form-control">
-        </form>
-    </div>
-
-    <div class="container d-none" id="favs-container"></div>
-    <div class="container d-none" id="user-based-container"></div>
-    <div class="container d-none" id="item-based-container"></div>
-
-</div>
-
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>
+<!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js"></script>-->
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+
 <script src="assets/js/code.js"></script>
 
+<?php
+session_start();
+if(!(isset($_SESSION["username"]))) {
+
+    include ("assets/layout/login.php");
+
+    }
+    else {
+        include ("assets/layout/header.php");
+        include ("assets/layout/main.php");
+    }
+
+?>
 
 </body>
 </html>
