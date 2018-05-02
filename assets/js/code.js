@@ -127,8 +127,7 @@ function showUserBased() {
                             '                    </div></div></div> ');
 
                         $("#user-based-container").append($elem);
-                        setTimeout(carousel,200);
-                        setTimeout(loadingDone,300);
+
                     });
 
 
@@ -140,7 +139,8 @@ function showUserBased() {
             console.log("error:", data);
         },
         complete: function (data) {
-
+            setTimeout(carousel,200);
+            setTimeout(loadingDone,300);
         }
 
     });
