@@ -2,6 +2,7 @@
 <?php
 if(isset($_SESSION["username"])){
     ?>
+    <div class="main">
     <div class="container">
         <div class="panel panel-default">
             <div class="panel-heading">
@@ -77,6 +78,8 @@ if(isset($_SESSION["username"])){
             </div>
         </div>
     </div>
+    </div>
+
 
 
     <script>

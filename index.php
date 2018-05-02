@@ -43,5 +43,8 @@ if(!(isset($_SESSION["username"]))) {
 
 ?>
 
+<div class="footer-copyright py-3 text-center">
+    © 2018 Copyright
+</div>
 </body>
 </html>
