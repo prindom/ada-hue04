@@ -64,13 +64,13 @@ function showFavs() {
 
                 if (i === 0) active = "active";
 
-                let title = value.name;
+                /*let title = value.name;
                 let year = title.match(/(\()([1-9])([0-9])([0-9])([0-9])(\))/g);
                 year = title.match(/([1-9])([0-9])([0-9])([0-9])/g);
                 year = year[0];
                 let name = title.substr(0,title.length-7);
-                name = name.replace(/ /g, '+');
-                getSrc(name, year, function(src){
+                name = name.replace(/ /g, '+');*/
+                getSrc(value.name, function(src){
                     let $elem = $('<div class="item '+ active +'"><div class="col-md-4">\n' +
                         '                <div class="thumbnail">' +
                         '                   <img src="'+ src +'" alt="..." height="200">\n' +
@@ -115,13 +115,8 @@ function showUserBased() {
                 let active = "";
 
                 if (i === 0) active = "active";
-                    let title = value;
-                    let year = title.match(/(\()([1-9])([0-9])([0-9])([0-9])(\))/g);
-                    year = title.match(/([1-9])([0-9])([0-9])([0-9])/g);
-                    year = year[0];
-                    let name = title.substr(0,title.length-7);
-                    name = name.replace(/ /g, '+');
-                    getSrc(name, year, function(src) {
+
+                    getSrc(value, function(src) {
 
                         let $elem = $('<div class="item ' + active + '"><div class="col-md-4">\n' +
                             '                <div class="thumbnail">' +
@@ -144,8 +139,8 @@ function showUserBased() {
             console.log("error:", data);
         },
         complete: function (data) {
-            console.log("userDone");
-            setTimeout(carousel,1000);
+            setTimeout(carousel,200);
+            setTimeout(loadingDone,300);
         }
 
     });
@@ -179,13 +174,13 @@ function showItemBased() {
 
                 if (i === 0) active = "active";
 
-                    let title = value.name;
+                    /*let title = value.name;
                     let year = title.match(/(\()([1-9])([0-9])([0-9])([0-9])(\))/g);
                     year = title.match(/([1-9])([0-9])([0-9])([0-9])/g);
                     year = year[0];
                     let name = title.substr(0,title.length-7);
-                    name = name.replace(/ /g, '+');
-                    getSrc(name, year, function(src) {
+                    name = name.replace(/ /g, '+');*/
+                    getSrc(value.name, function(src) {
 
                         let $elem = $('<div class="item ' + active + '"><div class="col-md-4">\n' +
                             '                <div class="thumbnail">' +
@@ -214,11 +209,15 @@ function showItemBased() {
 
 }
 
+function loadingDone() {
+    $('#loadingScreen').fadeOut();
+    $('body').css('overflowY','auto');
+}
 
 
 function carousel() {
 
-    console.log("in");
+    console.log("ind");
 
     $('.multi-item-carousel').carousel({
         interval: false
@@ -237,9 +236,23 @@ function carousel() {
             $(this).siblings(':first').children(':first-child').clone().appendTo($(this));
         }
     });
+
 }
 
-function getSrc(name, year, callback){
+function getSrc(value, callback){
+
+    let title = value;
+    let year = title.match(/(\()([1-9])([0-9])([0-9])([0-9])(\))/g);
+    year = title.match(/([1-9])([0-9])([0-9])([0-9])/g);
+    year = year[0];
+    let name = title.substr(0,title.length-7);
+    name = name.replace(/ /g, '+');
+
+    if (name.indexOf('(') > -1) {
+        let alternativeName = title.match(/(\()(.*)(\))/g);
+        name = name.substr(0, alternativeName.length);
+    }
+
     $.ajax({
         method: "GET",
         url: 'http://www.omdbapi.com/?t='+ name +'&y='+ year +'&apikey=7c130ecc',

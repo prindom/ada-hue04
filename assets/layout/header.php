@@ -8,11 +8,11 @@
 
 <script>
     $(document).ready(function () {
-       setTimeout(loadingDone, 3000)
+       //setTimeout(loadingDone, 3000)
     });
 
-    function loadingDone() {
+    /*function loadingDone() {
         $('#loadingScreen').fadeOut();
         $('body').css('overflowY','auto')
-    }
+    }*/
 </script>
