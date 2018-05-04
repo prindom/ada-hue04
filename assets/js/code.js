@@ -249,21 +249,24 @@ function getSrc(value, callback){
     name = name.replace(/ /g, '+');
 
     if (name.indexOf('(') > -1) {
-        let alternativeName = title.match(/(\()(.*)(\))/g);
-        name = name.substr(0, alternativeName.length);
+        console.log(name);
+        let alternativeName = name.match(/(\+)(\()(.*)(\))/g);
+        alternativeName = alternativeName.toString();
+        console.log(alternativeName + alternativeName.length);
+        console.log(name.length);
+        name = name.substr(0, name.length - alternativeName.length);
+        console.log(name);
     }
+
 
     $.ajax({
         method: "GET",
         url: 'http://www.omdbapi.com/?t='+ name +'&y='+ year +'&apikey=7c130ecc',
         dataType: "json",
         success: function (data) {
-            if(!data.imdbID) data.imdbID = 'tt0076759';
+            if(!data.Poster) data.Poster = 'https://ia.media-imdb.com/images/M/MV5BMTQ1MDQxNjcxNV5BMl5BanBnXkFtZTcwMTEwOTEzMQ@@._V1_SX300.jpg';
 
-                getImage(data.imdbID, function(src){
-                    callback(src);
-                });
-
+             callback(data.Poster);
 
         },
         error: function (data) {
@@ -276,20 +279,3 @@ function getSrc(value, callback){
 
 }
 
-function getImage(id, callback){
-    $.ajax({
-        method: "GET",
-        url: 'https://api.themoviedb.org/3/movie/'+ id +'?api_key=355fa6da60ddfc07f6199b375c55f0f5',
-        dataType: "json",
-        success: function (data) {
-            let src = "https://image.tmdb.org/t/p/w500"+data.poster_path;
-            callback(src);
-        },
-        error: function (data) {
-            console.log("error:", data);
-        },
-        complete: function (data) {
-
-        }
-    });
-}
