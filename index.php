@@ -31,15 +31,18 @@
 
 <?php
 session_start();
-if(!(isset($_SESSION["username"]))) {
 
+//proves if user is logged in
+if(!(isset($_SESSION["username"]))) {
+    //if no user is logged in the login.php file gets displayed
     include ("assets/layout/login.php");
 
-    }
-    else {
-        include ("assets/layout/header.php");
-        include ("assets/layout/main.php");
-    }
+}
+else {
+    //if a user is logged in the header and main page get displayed
+    include ("assets/layout/header.php");
+    include ("assets/layout/main.php");
+}
 
 ?>
 

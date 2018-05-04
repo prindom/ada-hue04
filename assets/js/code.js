@@ -1,5 +1,6 @@
 $(document).ready(function () {
     $("#login").submit(function (e) {
+        // user login
         e.preventDefault();
         $.ajax({
             method: "POST",
@@ -12,6 +13,7 @@ $(document).ready(function () {
                 if(data.found === true)
                 location.reload();
                 else {
+                    // user not in database
                     $('#login-container').append('<div class="alert alert-danger" role="alert">\n' +
                         '  <a href="#" class="alert-link">Für diesen Nutzer sind leider keine Filmvorschläge verfügbar :/</a>' +
                         '</div>')
@@ -27,6 +29,7 @@ $(document).ready(function () {
     });
 
     $("#logout").submit(function (e) {
+        // logout
         e.preventDefault();
         $.ajax({
             method: "POST",
@@ -51,6 +54,7 @@ $(document).ready(function () {
 });
 
 function showFavs() {
+    // appends favourite movies to container
     console.log("showFavs");
     $.ajax({
         method: "POST",
@@ -102,6 +106,7 @@ function showFavs() {
 }
 
 function showUserBased() {
+    // appends user based reccomendations to container
     console.log("showUserBased");
 
     $.ajax({
@@ -154,6 +159,8 @@ function showUserBased() {
 
 
 function showItemBased() {
+    // appends item based reccomendations to container
+
     console.log("showItemBased");
     console.log("in");
     $.ajax({
@@ -264,6 +271,7 @@ function getSrc(name, year, callback){
 }
 
 function getImage(id, callback){
+    // gets image from api
     $.ajax({
         method: "GET",
         url: 'https://api.themoviedb.org/3/movie/'+ id +'?api_key=355fa6da60ddfc07f6199b375c55f0f5',

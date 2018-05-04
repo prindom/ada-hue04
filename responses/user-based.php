@@ -10,11 +10,12 @@ $user = $_SESSION["username"];
 
 $similarities = [];
 $vogoo_users->member_k_similarities($user,30,$similarities);
-
+//gets max 30 similar users
 
 $recommendations = [];
 
 $vogoo_users->member_k_recommendations($user,15, $similarities, $recommendations);
+//get 15 best user based recommendations
 
 
 $final = [];

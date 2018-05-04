@@ -1,4 +1,4 @@
-
+<!--containers for favourite or recommended movies-->
 <?php
 if(isset($_SESSION["username"])){
     ?>

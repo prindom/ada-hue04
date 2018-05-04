@@ -1,13 +1,14 @@
 <?php
 
 $recommendations = $vogoo_items->member_get_recommended_items($_SESSION["username"]);
+//gets item based reccomendations
 
 $final = [];
 
 
 foreach($recommendations as $key => $recommendation){
 
-
+//    creates final reccomendations-array
     $reasons = $vogoo_items->member_get_reasons($_SESSION["username"], $recommendation);
 
 

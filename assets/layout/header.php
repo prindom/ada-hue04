@@ -1,3 +1,4 @@
+<!--header when user is logged in -->
 <div class="container" id = "welcome-container">
     <div class="container">
     <p class="col-sm-10 welcome-text-container">Hello, User <?php echo $_SESSION["username"]?></p>
@@ -8,12 +9,8 @@
     </div>
 </div>
 </div>
-<!--<div class="container" id="logout-container">
-    <form id="logout" class = "form-group">
-        <input type = "submit" value ="logout" class="btn btn-danger form-control">
-    </form>
-</div>-->
 
+<!--loading animation-->
 <div id="loadingScreen"><img src="./assets/images/loading.gif" alt="..."></div>
 
 <script>

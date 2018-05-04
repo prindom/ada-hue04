@@ -1,4 +1,6 @@
 <?php
+//controller file, no outputs
+
 session_start();
 
 const vg_dbhost = 'localhost';
@@ -18,6 +20,7 @@ if (isset($_POST["login"])) {
 
 
 if (isset($_POST["method"])) {
+    //includes required files
     if ($_POST["method"] == "getItemBased") {
         include "./responses/item-based.php";
     }
@@ -38,7 +41,7 @@ if (isset($_POST["method"])) {
  */
 function login($user)
 {
-
+//userlogin
 
     $sql = "SELECT * FROM vogoo_ratings WHERE member_id = " . $user;
 
@@ -59,6 +62,7 @@ function login($user)
 }
 
 function logout(){
+    //userlogout
     echo json_encode(["success" => true, "message" => "user was logged out"]);
 
     exit;
